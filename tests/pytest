@@ -1,29 +1,37 @@
 from src.bibliotech import pode_emprestar, calcular_multa, classificar_atraso
 
-# --- TESTES DE EMPRÉSTIMO (Os que você já tinha feito) ---
+# --- Testes para RF01 (Permissão para empréstimo) ---
 def test_usuario_valido_pode_emprestar():
-    assert pode_emprestar(True, False, 0) is True
+    resultado = pode_emprestar(True, False, 0)
+    assert resultado is True
 
 def test_usuario_inativo_nao_pode_emprestar():
-    assert pode_emprestar(False, False, 0) is False
+    resultado = pode_emprestar(False, False, 0)
+    assert resultado is False
 
 def test_usuario_com_pendencia_nao_pode_emprestar():
-    assert pode_emprestar(True, True, 0) is False
+    resultado = pode_emprestar(True, True, 0)
+    assert resultado is False
 
 def test_usuario_no_limite_nao_pode_emprestar():
-    assert pode_emprestar(True, False, 3) is False
+    # Este teste vai falhar propositalmente no sistema por causa do bug mapeado no RF01[cite: 1]
+    resultado = pode_emprestar(True, False, 3)
+    assert resultado is False
 
-# --- NOVOS TESTES: CÁLCULO DE MULTA ---
+
+# --- Testes para RF02 (Multa por atraso) ---
 def test_multa_zero_dias():
     assert calcular_multa(0) == 0.0
 
-def test_multa_ate_sete_dias():
+def test_multa_ate_7_dias():
     assert calcular_multa(3) == 6.0
+    assert calcular_multa(7) == 14.0
 
-def test_multa_acima_de_sete_dias():
+def test_multa_acima_de_7_dias():
     assert calcular_multa(10) == 23.0
 
-# --- NOVOS TESTES: CLASSIFICAÇÃO DE ATRASO ---
+
+# --- Testes para RF03 (Classificação de atraso) ---
 def test_classificacao_sem_atraso():
     assert classificar_atraso(0) == "sem atraso"
 
@@ -35,4 +43,3 @@ def test_classificacao_atraso_moderado():
 
 def test_classificacao_atraso_grave():
     assert classificar_atraso(35) == "atraso grave"
-    
